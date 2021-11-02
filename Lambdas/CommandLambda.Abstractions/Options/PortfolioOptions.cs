@@ -2,8 +2,8 @@
 
 namespace CommandLambda.Options
 {
-    [Verb("portfolio", HelpText = "Perform magic on single coin pairs.")]
-    public class PortfolioOptions
+    [Verb("portfolio", HelpText = "Generate a portfolio.")]
+    public class PortfolioOptions : IOptions
     {
 
     }

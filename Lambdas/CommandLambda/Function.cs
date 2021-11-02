@@ -1,6 +1,7 @@
 using Amazon.Lambda.Core;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
+using CommandLambda.Commands;
 using CommandLambda.Options;
 using CommandLine;
 using System;
@@ -21,7 +22,7 @@ namespace CommandLambda
         /// <param name="args"></param>
         private static async Task Main(string[] args)
         {
-            Func<string[], ILambdaContext, CommandResult> func = FunctionHandler;
+            Func<string[], ILambdaContext, Task<CommandResult>> func = FunctionHandler;
             using (var handlerWrapper = HandlerWrapper.GetHandlerWrapper(func, new DefaultLambdaJsonSerializer()))
             using (var bootstrap = new LambdaBootstrap(handlerWrapper))
             {
@@ -39,13 +40,13 @@ namespace CommandLambda
         /// <param name="input"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static CommandResult FunctionHandler(string[] input, ILambdaContext context)
+        public static async Task<CommandResult> FunctionHandler(string[] input, ILambdaContext context)
         {
-            return Parser.Default.ParseArguments<MetricsOptions, PortfolioOptions>(input)
+            return await Parser.Default.ParseArguments<MetricsOptions, PortfolioOptions>(input)
                 .MapResult(
-                    (MetricsOptions opts) => new CommandResult(opts.Pair), // Process the metrics command here with the provided options
-                    (PortfolioOptions opts) => new("pf"),
-                    errs => new("Command not recognized"));
+                    (MetricsOptions opts) => new MetricsCommand().ProcessAsync(opts),
+                    (PortfolioOptions opts) => new PortfolioCommand().ProcessAsync(opts),
+                    errs => Task.FromResult<CommandResult>(new("Command not recognized")));
         }
     }
 }

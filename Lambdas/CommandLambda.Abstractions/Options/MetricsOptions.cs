@@ -3,7 +3,7 @@
 namespace CommandLambda.Options
 {
     [Verb("metrics", HelpText = "Perform magic on single coin pairs.")]
-    public class MetricsOptions
+    public class MetricsOptions : IOptions
     {
         [Option('p', "pair", Required = true)]
         public string Pair { get; set; }
