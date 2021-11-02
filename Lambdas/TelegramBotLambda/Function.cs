@@ -1,7 +1,10 @@
+using Amazon.Lambda;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
+using Amazon.Lambda.Model;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
+using CommandLambda;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -16,7 +19,7 @@ namespace TelegramBotLambda
 {
     public class Function
     {
-        private static CommandService _commandService;
+
         /// <summary>
         /// The main entry point for the custom runtime.
         /// </summary>
@@ -25,7 +28,6 @@ namespace TelegramBotLambda
         {
             try
             {
-                _commandService = new CommandService();
                 Func<APIGatewayHttpApiV2ProxyRequest, ILambdaContext, Task<APIGatewayHttpApiV2ProxyResponse>> func = FunctionHandler;
                 using (var handlerWrapper = HandlerWrapper.GetHandlerWrapper(func, new DefaultLambdaJsonSerializer()))
                 using (var bootstrap = new LambdaBootstrap(handlerWrapper))
@@ -33,7 +35,7 @@ namespace TelegramBotLambda
                     await bootstrap.RunAsync();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 LambdaLogger.Log(e.Message);
             }
@@ -54,8 +56,17 @@ namespace TelegramBotLambda
             try
             {
                 LambdaLogger.Log(input.Body);
+
                 var updateEvent = Newtonsoft.Json.JsonConvert.DeserializeObject<Update>(input.Body);
-                await _commandService.SendAsync(updateEvent);
+                var command = updateEvent.Message.Text.TrimStart('/').Split();
+
+                var client = new AmazonLambdaClient();
+                var request = new InvokeRequest { FunctionName = "CommandProcessor", Payload = System.Text.Json.JsonSerializer.Serialize(command) };
+                var response = await client.InvokeAsync(request);
+                var result = await System.Text.Json.JsonSerializer.DeserializeAsync<CommandResult>(response.Payload);
+
+                LambdaLogger.Log(result.Text);
+                // trigger event with commandresult
 
                 return new APIGatewayHttpApiV2ProxyResponse { StatusCode = (int)HttpStatusCode.NoContent };
             }
