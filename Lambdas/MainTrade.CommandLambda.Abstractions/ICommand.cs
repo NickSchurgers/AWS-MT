@@ -1,7 +1,7 @@
-﻿using CommandLambda.Options;
+﻿using MainTrade.CommandLambda.Options;
 using System.Threading.Tasks;
 
-namespace CommandLambda
+namespace MainTrade.CommandLambda
 {
     public interface ICommand<TOptions> where TOptions : IOptions
     {

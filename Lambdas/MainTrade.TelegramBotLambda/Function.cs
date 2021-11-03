@@ -4,7 +4,7 @@ using Amazon.Lambda.Core;
 using Amazon.Lambda.Model;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
-using CommandLambda;
+using MainTrade.CommandLambda;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -15,7 +15,7 @@ using Telegram.Bot.Types;
 // AWS .NET Mock Lambda Test Tool.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
 
-namespace TelegramBotLambda
+namespace MainTrade.TelegramBotLambda
 {
     public class Function
     {

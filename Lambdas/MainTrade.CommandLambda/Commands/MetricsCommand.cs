@@ -1,8 +1,8 @@
-﻿using CommandLambda.Options;
+﻿using MainTrade.CommandLambda.Options;
 using System;
 using System.Threading.Tasks;
 
-namespace CommandLambda.Commands
+namespace MainTrade.CommandLambda.Commands
 {
     internal class MetricsCommand : ICommand<MetricsOptions>
     {

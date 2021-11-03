@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.0.91" />
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
   </ItemGroup>
 

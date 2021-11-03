@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace CommandLambda.Options
+namespace MainTrade.CommandLambda.Options
 {
     [Verb("metrics", HelpText = "Perform magic on single coin pairs.")]
     public class MetricsOptions : IOptions

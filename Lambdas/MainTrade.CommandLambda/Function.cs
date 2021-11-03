@@ -1,18 +1,19 @@
 using Amazon.Lambda.Core;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
-using CommandLambda.Commands;
-using CommandLambda.Options;
+using MainTrade.CommandLambda.Commands;
+using MainTrade.CommandLambda.Options;
 using CommandLine;
 using System;
 using System.Threading.Tasks;
+using CommandLambda.Options;
 
 // This project specifies the serializer used to convert Lambda event into .NET classes in the project's main 
 // main function. This assembly register a serializer for use when the project is being debugged using the
 // AWS .NET Mock Lambda Test Tool.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
 
-namespace CommandLambda
+namespace MainTrade.CommandLambda
 {
     public class Function
     {
@@ -42,8 +43,9 @@ namespace CommandLambda
         /// <returns></returns>
         public static async Task<CommandResult> FunctionHandler(string[] input, ILambdaContext context)
         {
-            return await Parser.Default.ParseArguments<MetricsOptions, PortfolioOptions>(input)
+            return await Parser.Default.ParseArguments<ExchangeOptions, MetricsOptions, PortfolioOptions>(input)
                 .MapResult(
+                    (ExchangeOptions opts) => new ExchangeCommand().ProcessAsync(opts),
                     (MetricsOptions opts) => new MetricsCommand().ProcessAsync(opts),
                     (PortfolioOptions opts) => new PortfolioCommand().ProcessAsync(opts),
                     errs => Task.FromResult<CommandResult>(new("Command not recognized")));
