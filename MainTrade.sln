@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainTrade.CommandLambda", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainTrade.TelegramBotLambda", "Lambdas\MainTrade.TelegramBotLambda\MainTrade.TelegramBotLambda.csproj", "{F80F8195-41E7-492A-B5D5-A8AB3806011A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainTrade.TelegramNotificationLambda", "Lambdas\MainTrade.TelegramNotificationLambda\MainTrade.TelegramNotificationLambda.csproj", "{6FBC4A39-157F-4227-B187-114C80C866F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{F80F8195-41E7-492A-B5D5-A8AB3806011A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F80F8195-41E7-492A-B5D5-A8AB3806011A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F80F8195-41E7-492A-B5D5-A8AB3806011A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FBC4A39-157F-4227-B187-114C80C866F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FBC4A39-157F-4227-B187-114C80C866F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FBC4A39-157F-4227-B187-114C80C866F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FBC4A39-157F-4227-B187-114C80C866F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,6 +49,7 @@ Global
 		{F89E3BA7-B2D2-40C7-902E-3F12E85D6C6E} = {92932C3B-7F38-4BFB-A0DB-7A3972BF7693}
 		{0C8E65B1-412B-4A1D-B861-71E24F115421} = {92932C3B-7F38-4BFB-A0DB-7A3972BF7693}
 		{F80F8195-41E7-492A-B5D5-A8AB3806011A} = {92932C3B-7F38-4BFB-A0DB-7A3972BF7693}
+		{6FBC4A39-157F-4227-B187-114C80C866F8} = {92932C3B-7F38-4BFB-A0DB-7A3972BF7693}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ED7CB654-227E-4CB2-B25F-EB8A7D843B4A}

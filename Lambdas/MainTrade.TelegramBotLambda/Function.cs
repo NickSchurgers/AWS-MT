@@ -4,6 +4,8 @@ using Amazon.Lambda.Core;
 using Amazon.Lambda.Model;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
+using Amazon.SimpleNotificationService;
+using Amazon.SimpleNotificationService.Model;
 using MainTrade.CommandLambda;
 using System;
 using System.Net;
@@ -65,8 +67,18 @@ namespace MainTrade.TelegramBotLambda
                 var response = await client.InvokeAsync(request);
                 var result = await System.Text.Json.JsonSerializer.DeserializeAsync<CommandResult>(response.Payload);
 
-                LambdaLogger.Log(result.Text);
-                // trigger event with commandresult
+                var snsClient = new AmazonSimpleNotificationServiceClient();
+                var snsRequest = new PublishRequest
+                {
+                    TopicArn = "arn:aws:sns:us-east-1:890196580586:telegram",
+                    Message = result.Text,
+                    MessageAttributes = new System.Collections.Generic.Dictionary<string, MessageAttributeValue> {
+                        { "chat_id",
+                            new MessageAttributeValue { DataType = "String", StringValue = updateEvent.Message.Chat.Id.ToString() }
+                        }
+                    }
+                };
+                await snsClient.PublishAsync(snsRequest);
 
                 return new APIGatewayHttpApiV2ProxyResponse { StatusCode = (int)HttpStatusCode.NoContent };
             }
