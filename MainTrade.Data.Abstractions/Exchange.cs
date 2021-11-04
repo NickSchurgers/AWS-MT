@@ -10,5 +10,6 @@ namespace MainTrade.Data
 
         [DynamoDBRangeKey("name")]
         public string Name { get; set; }
+
     }
 }
