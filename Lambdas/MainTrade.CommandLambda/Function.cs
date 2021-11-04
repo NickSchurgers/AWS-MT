@@ -43,12 +43,19 @@ namespace MainTrade.CommandLambda
         /// <returns></returns>
         public static async Task<CommandResult> FunctionHandler(string[] input, ILambdaContext context)
         {
-            return await Parser.Default.ParseArguments<ExchangeOptions, MetricsOptions, PortfolioOptions>(input)
-                .MapResult(
-                    (ExchangeOptions opts) => new ExchangeCommand().ProcessAsync(opts),
-                    (MetricsOptions opts) => new MetricsCommand().ProcessAsync(opts),
-                    (PortfolioOptions opts) => new PortfolioCommand().ProcessAsync(opts),
-                    errs => Task.FromResult<CommandResult>(new("Command not recognized")));
+            try
+            {
+                return await Parser.Default.ParseArguments<ExchangeOptions, MetricsOptions, PortfolioOptions>(input)
+                    .MapResult(
+                        (ExchangeOptions opts) => new ExchangeCommand().ProcessAsync(opts),
+                        (MetricsOptions opts) => new MetricsCommand().ProcessAsync(opts),
+                        (PortfolioOptions opts) => new PortfolioCommand().ProcessAsync(opts),
+                        errs => Task.FromResult<CommandResult>(new("Command not recognized")));
+            }
+            catch (Exception ex)
+            {
+                return new CommandResult(ex.Message);
+            }
         }
     }
 }
