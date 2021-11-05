@@ -7,6 +7,10 @@ using CommandLine;
 using System;
 using System.Threading.Tasks;
 using CommandLambda.Options;
+using System.Collections.Generic;
+using CommandLine.Text;
+using System.Text;
+using System.IO;
 
 // This project specifies the serializer used to convert Lambda event into .NET classes in the project's main 
 // main function. This assembly register a serializer for use when the project is being debugged using the
@@ -50,7 +54,7 @@ namespace MainTrade.CommandLambda
                         (ExchangeOptions opts) => new ExchangeCommand().ProcessAsync(opts),
                         (MetricsOptions opts) => new MetricsCommand().ProcessAsync(opts),
                         (PortfolioOptions opts) => new PortfolioCommand().ProcessAsync(opts),
-                        errs => Task.FromResult<CommandResult>(new("Command not recognized")));
+                        errs => Task.FromResult<CommandResult>(new("Command not recognized.")));
             }
             catch (Exception ex)
             {

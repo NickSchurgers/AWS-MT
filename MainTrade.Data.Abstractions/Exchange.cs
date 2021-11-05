@@ -2,14 +2,7 @@
 
 namespace MainTrade.Data
 {
-    [DynamoDBTable("exchanges")]
-    public class Exchange
+    public class Exchange : MainTrade
     {
-        [DynamoDBHashKey("id")]
-        public int Id { get; set; }
-
-        [DynamoDBRangeKey("name")]
-        public string Name { get; set; }
-
     }
 }

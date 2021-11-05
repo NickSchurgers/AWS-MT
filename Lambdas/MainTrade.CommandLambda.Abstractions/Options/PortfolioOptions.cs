@@ -8,15 +8,20 @@ namespace MainTrade.CommandLambda.Options
         [Option('e', "exchange", Required = true, HelpText = "Exchange to generate for.")]
         public string Exchange { get; set; }
 
-        [Option('a', "amount", Required = true, HelpText = "Amount of coin pairs to use.")]
+        [Option('c', "amount", Required = true, HelpText = "Amount of coin pairs to use.")]
         public int Amount { get; set; }
 
-        [Option('r', "risk", Default = 0.75, HelpText = "Maximum risk.")]
+        [Option('r', "risk", Default = 0.75, HelpText = "Maximum risk. Defaults to 0.75")]
         public double Risk { get; set; }
 
-        [Option('b', "base", HelpText = "Base to use.")]
+        [Option('b', "base", Default = "BTC", HelpText = "Base to use. Defaults to BTC.")]
         public string Base { get; set; }
 
+        [Option('s', "sort", Default = "momentum", HelpText = "Sort results by momentum, risk or alt_rank. Defaults to momentum.")]
+        public string Sort { get; set; }
+
+        [Option('d', "direction", Default = "desc", HelpText = "Sort direction; asc or desc. Defaults to desc.")]
+        public string SortDirection { get; set; }
 
         [Option("mcmin", SetName = "market_cap", HelpText = "Minimum market cap.")]
         public int? MarketCapMin { get; set; }

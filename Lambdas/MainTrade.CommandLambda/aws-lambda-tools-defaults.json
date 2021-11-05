@@ -12,7 +12,7 @@
     "framework"     : "net5.0",
     "function-runtime" : "provided.al2",
     "function-memory-size" : 128,
-    "function-timeout"     : 25,
+    "function-timeout"     : 60,
     "function-handler"     : "index.handler",
     "msbuild-parameters"   : "--self-contained true",
     "function-name"        : "CommandProcessor",

@@ -11,8 +11,8 @@ namespace MainTrade.CommandLambda.Commands
     {
         public override async Task<CommandResult> ProcessAsync(ExchangeOptions options)
         {
-            var exchanges = await Context.ScanAsync<Exchange>(null).GetRemainingAsync();
-            return new CommandResult(string.Join(Environment.NewLine, exchanges.Select(x => x.Name)));
+            var exchanges = await Context.QueryAsync<Exchange>(PartitionKeys.EXCHANGE).GetRemainingAsync();
+            return new CommandResult(string.Join(Environment.NewLine, exchanges.Select(x => x.Sk)));
         }
     }
 }
