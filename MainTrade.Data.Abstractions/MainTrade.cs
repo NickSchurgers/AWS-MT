@@ -1,4 +1,5 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
+using System;
 
 namespace MainTrade.Data
 {
@@ -10,5 +11,8 @@ namespace MainTrade.Data
 
         [DynamoDBRangeKey("sk")]
         public string Sk { get; set; }
+
+        [DynamoDBProperty("timestamp")]
+        public DateTime TimeStamp { get; set; }
     }
 }

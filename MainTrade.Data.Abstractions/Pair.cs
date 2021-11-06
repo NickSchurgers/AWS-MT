@@ -5,6 +5,12 @@ namespace MainTrade.Data
 {
     public class Pair : MainTrade
     {
+        [DynamoDBProperty("base")]
+        public string Base { get; set; }
+
+        [DynamoDBProperty("quote")]
+        public string Quote { get; set; }
+
         [DynamoDBProperty("value")]
         public double? Value { get; set; }
 

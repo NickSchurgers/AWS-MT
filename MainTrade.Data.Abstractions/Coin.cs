@@ -4,7 +4,7 @@ namespace MainTrade.Data
 {
     public class Coin : MainTrade
     {
-        [DynamoDBProperty("name")]
+        [DynamoDBProperty("full_name")]
         public string Name { get; set; }
 
         [DynamoDBProperty("stable_coin")]
