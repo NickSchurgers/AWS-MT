@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using CommandLine.Text;
 using System.Text;
 using System.IO;
+using System.Linq;
+using CommandLambda.CommandResults;
 
 // This project specifies the serializer used to convert Lambda event into .NET classes in the project's main 
 // main function. This assembly register a serializer for use when the project is being debugged using the
@@ -49,17 +51,61 @@ namespace MainTrade.CommandLambda
         {
             try
             {
-                return await Parser.Default.ParseArguments<ExchangeOptions, MetricsOptions, PortfolioOptions>(input)
-                    .MapResult(
+                var result = new Parser(c => c.HelpWriter = null).ParseArguments<ExchangeOptions, MetricsOptions, PortfolioOptions>(input);
+                return await result.MapResult(
                         (ExchangeOptions opts) => new ExchangeCommand().ProcessAsync(opts),
                         (MetricsOptions opts) => new MetricsCommand().ProcessAsync(opts),
                         (PortfolioOptions opts) => new PortfolioCommand().ProcessAsync(opts),
-                        errs => Task.FromResult<CommandResult>(new("Command not recognized.")));
+                        errs => Task.FromResult(ParseErrors(result, errs)));
             }
             catch (Exception ex)
             {
-                return new CommandResult(ex.Message);
+                return new CommandResult(CommandResultType.ERROR, ex.Message);
             }
+        }
+
+        private static CommandResult ParseErrors(ParserResult<object> result, IEnumerable<Error> errors)
+        {
+            foreach(var error in errors)
+            {
+                switch (error.Tag)
+                {
+
+                    case ErrorType.HelpRequestedError:
+                    case ErrorType.HelpVerbRequestedError:
+                        return new CommandResult(CommandResultType.TEXT, new CommandResultText() { Text = HelpText.AutoBuild(result).ToString() });
+
+                    case ErrorType.BadFormatTokenError:
+                    case ErrorType.MissingValueOptionError:
+                    case ErrorType.UnknownOptionError:
+                    case ErrorType.MissingRequiredOptionError:
+                    case ErrorType.MutuallyExclusiveSetError:
+                    case ErrorType.BadFormatConversionError:
+                    case ErrorType.SequenceOutOfRangeError:
+                    case ErrorType.RepeatedOptionError:
+                    case ErrorType.NoVerbSelectedError:
+                    case ErrorType.BadVerbSelectedError:
+                    case ErrorType.VersionRequestedError:
+                    case ErrorType.SetValueExceptionError:
+                    case ErrorType.InvalidAttributeConfigurationError:
+                    case ErrorType.MissingGroupOptionError:
+                    case ErrorType.GroupOptionAmbiguityError:
+                    case ErrorType.MultipleDefaultVerbsError:
+                    default:
+                        break;
+                }
+            }
+
+            var builder = SentenceBuilder.Create();
+            var errorMessages = HelpText.RenderParsingErrorsTextAsLines(result, builder.FormatError, builder.FormatMutuallyExclusiveSetErrors, 1);
+            var excList = errorMessages.Select(msg => new ArgumentException(msg)).ToList();
+
+            if (excList.Any())
+            {
+               return new CommandResult(CommandResultType.ERROR, new AggregateException(excList));
+            }
+
+            return new CommandResult(CommandResultType.ERROR, new ArgumentException("Error processing command."));
         }
     }
 }

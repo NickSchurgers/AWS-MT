@@ -1,7 +1,6 @@
 ﻿using CommandLambda;
 using CommandLambda.Options;
 using MainTrade.Data;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,7 +11,7 @@ namespace MainTrade.CommandLambda.Commands
         public override async Task<CommandResult> ProcessAsync(ExchangeOptions options)
         {
             var exchanges = await Context.QueryAsync<Exchange>(PartitionKeys.EXCHANGE).GetRemainingAsync();
-            return new CommandResult(string.Join(Environment.NewLine, exchanges.Select(x => x.Sk)));
+            return new CommandResult(CommandResultType.LIST, exchanges.Select(x => x.Sk));
         }
     }
 }

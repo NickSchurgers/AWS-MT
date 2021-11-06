@@ -6,9 +6,12 @@ using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
+using CommandLambda.CommandResults;
 using MainTrade.CommandLambda;
 using System;
+using System.Collections.Generic;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
 
@@ -57,8 +60,6 @@ namespace MainTrade.TelegramBotLambda
         {
             try
             {
-                LambdaLogger.Log(input.Body);
-
                 var updateEvent = Newtonsoft.Json.JsonConvert.DeserializeObject<Update>(input.Body);
                 var command = updateEvent.Message.Text.TrimStart('/').Split();
 
@@ -71,7 +72,7 @@ namespace MainTrade.TelegramBotLambda
                 var snsRequest = new PublishRequest
                 {
                     TopicArn = "arn:aws:sns:us-east-1:890196580586:telegram",
-                    Message = result.Text,
+                    Message = ParseMessage(result),
                     MessageAttributes = new System.Collections.Generic.Dictionary<string, MessageAttributeValue> {
                         { "chat_id",
                             new MessageAttributeValue { DataType = "String", StringValue = updateEvent.Message.Chat.Id.ToString() }
@@ -89,6 +90,20 @@ namespace MainTrade.TelegramBotLambda
 
                 return new APIGatewayHttpApiV2ProxyResponse { StatusCode = (int)HttpStatusCode.InternalServerError };
             }
+        }
+
+        private static string ParseMessage(CommandResult result)
+        {
+            var res = ((JsonElement)result.Result).GetRawText();
+            return result.Type switch
+            {
+                CommandResultType.METRICS => throw new NotImplementedException(),
+                CommandResultType.PORTFOLIO => ((CommandResultPortfolio)result.Result).Text,
+                CommandResultType.LIST => string.Join(System.Environment.NewLine, (List<string>)result.Result),
+                CommandResultType.TEXT => (JsonSerializer.Deserialize<CommandResultText>(res)).Text,
+                CommandResultType.ERROR => $"Error: {result.Result}",
+                _ => throw new ArgumentOutOfRangeException($"Invalid command result type: {result.Type}"),
+            };
         }
     }
 }

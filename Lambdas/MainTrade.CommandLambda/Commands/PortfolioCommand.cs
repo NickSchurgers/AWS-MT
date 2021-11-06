@@ -1,6 +1,7 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
 using CommandLambda;
+using CommandLambda.CommandResults;
 using MainTrade.CommandLambda.Options;
 using MainTrade.Data;
 using System;
@@ -21,7 +22,7 @@ namespace MainTrade.CommandLambda.Commands
 
             var text = string.Join(Environment.NewLine, pairs.Select(x => $"Coin: {x.Quote} \\ Market cap: {x.MarketCap} \\ Risk: {x.Risk} \\ AltRank: {x.AltRank}"));
 
-            return new CommandResult(text);
+            return new CommandResult(CommandResultType.PORTFOLIO, new CommandResultPortfolio { Text = text });
         }
 
         private Task<List<Pair>> GetPairs(PortfolioOptions options)
