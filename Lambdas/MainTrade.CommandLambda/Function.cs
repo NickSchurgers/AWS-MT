@@ -13,6 +13,7 @@ using System.Text;
 using System.IO;
 using System.Linq;
 using CommandLambda.CommandResults;
+using CommandLambda;
 
 // This project specifies the serializer used to convert Lambda event into .NET classes in the project's main 
 // main function. This assembly register a serializer for use when the project is being debugged using the
@@ -29,7 +30,7 @@ namespace MainTrade.CommandLambda
         /// <param name="args"></param>
         private static async Task Main(string[] args)
         {
-            Func<string[], ILambdaContext, Task<CommandResult>> func = FunctionHandler;
+            Func<string[], ILambdaContext, Task<ICommandResult>> func = FunctionHandler;
             using (var handlerWrapper = HandlerWrapper.GetHandlerWrapper(func, new DefaultLambdaJsonSerializer()))
             using (var bootstrap = new LambdaBootstrap(handlerWrapper))
             {
@@ -47,7 +48,7 @@ namespace MainTrade.CommandLambda
         /// <param name="input"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static async Task<CommandResult> FunctionHandler(string[] input, ILambdaContext context)
+        public static async Task<ICommandResult> FunctionHandler(string[] input, ILambdaContext context)
         {
             try
             {
@@ -60,20 +61,20 @@ namespace MainTrade.CommandLambda
             }
             catch (Exception ex)
             {
-                return new CommandResult(CommandResultType.ERROR, ex.Message);
+                return new CommandResult<CommandResultError>(CommandResultType.ERROR, new CommandResultError(ex));
             }
         }
 
-        private static CommandResult ParseErrors(ParserResult<object> result, IEnumerable<Error> errors)
+        private static ICommandResult ParseErrors(ParserResult<object> result, IEnumerable<Error> errors)
         {
-            foreach(var error in errors)
+            foreach (var error in errors)
             {
                 switch (error.Tag)
                 {
 
                     case ErrorType.HelpRequestedError:
                     case ErrorType.HelpVerbRequestedError:
-                        return new CommandResult(CommandResultType.TEXT, new CommandResultText() { Text = HelpText.AutoBuild(result).ToString() });
+                        return new CommandResult<CommandResultText>(CommandResultType.TEXT, new CommandResultText(HelpText.AutoBuild(result).ToString()));
 
                     case ErrorType.BadFormatTokenError:
                     case ErrorType.MissingValueOptionError:
@@ -102,10 +103,10 @@ namespace MainTrade.CommandLambda
 
             if (excList.Any())
             {
-               return new CommandResult(CommandResultType.ERROR, new AggregateException(excList));
+                return new CommandResult<CommandResultError>(CommandResultType.ERROR, new CommandResultError(new AggregateException(excList)));
             }
 
-            return new CommandResult(CommandResultType.ERROR, new ArgumentException("Error processing command."));
+            return new CommandResult<CommandResultError>(CommandResultType.ERROR, new CommandResultError(new ArgumentException("Error processing command.")));
         }
     }
 }

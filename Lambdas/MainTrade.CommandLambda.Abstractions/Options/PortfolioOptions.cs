@@ -17,17 +17,17 @@ namespace MainTrade.CommandLambda.Options
         [Option('b', "base", Default = "BTC", HelpText = "Base to use. Defaults to BTC.")]
         public string Base { get; set; }
 
-        [Option("rw", "risk_weight", Default = 0.50, HelpText = "Portfolio allocation weight for risk. Defaults to 0.50")]
-        public double RiskWeight { get; set; }
-
-        [Option("mw", "momentum_weight", Default = 0.50, HelpText = "Portfolio allocation weight for momentum. Defaults to 0.50")]
-        public double MomentumWeight { get; set; }
-
         [Option('s', "sort", Default = "momentum", HelpText = "Sort results by momentum, risk or alt_rank. Defaults to momentum.")]
         public string Sort { get; set; }
 
         [Option('d', "direction", Default = "desc", HelpText = "Sort direction; asc or desc. Defaults to desc.")]
         public string SortDirection { get; set; }
+
+        [Option("rw", Default = 0.50, HelpText = "Portfolio allocation weight for risk. Defaults to 0.50")]
+        public double RiskWeight { get; set; }
+
+        [Option("mw", Default = 0.50, HelpText = "Portfolio allocation weight for momentum. Defaults to 0.50")]
+        public double MomentumWeight { get; set; }
 
         [Option("mcmin", SetName = "market_cap", HelpText = "Minimum market cap.")]
         public int? MarketCapMin { get; set; }

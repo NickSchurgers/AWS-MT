@@ -14,6 +14,6 @@ namespace CommandLambda
 
         public AmazonDynamoDBClient Client => _client;
 
-        public abstract Task<CommandResult> ProcessAsync(T options);
+        public abstract Task<ICommandResult> ProcessAsync(T options);
     }
 }

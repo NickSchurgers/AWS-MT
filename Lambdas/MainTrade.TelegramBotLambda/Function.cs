@@ -6,10 +6,12 @@ using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
+using CommandLambda;
 using CommandLambda.CommandResults;
 using MainTrade.CommandLambda;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -66,14 +68,13 @@ namespace MainTrade.TelegramBotLambda
                 var client = new AmazonLambdaClient();
                 var request = new InvokeRequest { FunctionName = "CommandProcessor", Payload = System.Text.Json.JsonSerializer.Serialize(command) };
                 var response = await client.InvokeAsync(request);
-                var result = await System.Text.Json.JsonSerializer.DeserializeAsync<CommandResult>(response.Payload);
 
                 var snsClient = new AmazonSimpleNotificationServiceClient();
                 var snsRequest = new PublishRequest
                 {
                     TopicArn = "arn:aws:sns:us-east-1:890196580586:telegram",
-                    Message = ParseMessage(result),
-                    MessageAttributes = new System.Collections.Generic.Dictionary<string, MessageAttributeValue> {
+                    Message = await ParseResult(response.Payload),
+                    MessageAttributes = new Dictionary<string, MessageAttributeValue> {
                         { "chat_id",
                             new MessageAttributeValue { DataType = "String", StringValue = updateEvent.Message.Chat.Id.ToString() }
                         }
@@ -92,18 +93,51 @@ namespace MainTrade.TelegramBotLambda
             }
         }
 
-        private static string ParseMessage(CommandResult result)
+        private static async Task<string> ParseResult(MemoryStream json)
         {
-            var res = ((JsonElement)result.Result).GetRawText();
-            return result.Type switch
+            var jsonRoot = (await JsonDocument.ParseAsync(json)).RootElement;
+            var type = (CommandResultType)jsonRoot.GetProperty("Type").GetInt32();
+            var data = jsonRoot.GetProperty("Data").GetRawText();
+
+            return type switch
             {
-                CommandResultType.METRICS => throw new NotImplementedException(),
-                CommandResultType.PORTFOLIO => ((CommandResultPortfolio)result.Result).Text,
-                CommandResultType.LIST => string.Join(System.Environment.NewLine, (List<string>)result.Result),
-                CommandResultType.TEXT => (JsonSerializer.Deserialize<CommandResultText>(res)).Text,
-                CommandResultType.ERROR => $"Error: {result.Result}",
-                _ => throw new ArgumentOutOfRangeException($"Invalid command result type: {result.Type}"),
+                CommandResultType.METRICS => ParseMetrics(data),
+                CommandResultType.PORTFOLIO => ParsePortfolio(data),
+                CommandResultType.LIST => ParseList(data),
+                CommandResultType.TEXT => ParseText(data),
+                CommandResultType.ERROR => ParseError(data),
+                _ => throw new ArgumentOutOfRangeException($"Invalid command result type: {type}"),
             };
+        }
+
+        private static string ParseMetrics(string data)
+        {
+            var metrics = JsonSerializer.Deserialize<CommandResultMetrics>(data);
+            return metrics.Text;
+        }
+
+        private static string ParsePortfolio(string data)
+        {
+            var pf = JsonSerializer.Deserialize<CommandResultPortfolio>(data);
+            return pf.Text;
+        }
+
+        private static string ParseList(string data)
+        {
+            var list = JsonSerializer.Deserialize<CommandResultList>(data);
+            return "";
+        }
+
+        private static string ParseText(string data)
+        {
+            var text = JsonSerializer.Deserialize<CommandResultText>(data);
+            return text.Text;
+        }
+
+        private static string ParseError(string data)
+        {
+            var error = JsonSerializer.Deserialize<CommandResultError>(data);
+            return error.Exception.Message;
         }
     }
 }

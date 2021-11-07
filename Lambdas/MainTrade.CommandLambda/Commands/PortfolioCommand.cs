@@ -14,7 +14,7 @@ namespace MainTrade.CommandLambda.Commands
     internal class PortfolioCommand : BaseCommand<PortfolioOptions>
     {
 
-        public override async Task<CommandResult> ProcessAsync(PortfolioOptions options)
+        public override async Task<ICommandResult> ProcessAsync(PortfolioOptions options)
         {
             IEnumerable<Pair> pairs = await GetPairs(options);
             pairs = Sort(options, pairs)
@@ -22,7 +22,7 @@ namespace MainTrade.CommandLambda.Commands
 
             var text = string.Join(Environment.NewLine, pairs.Select(x => $"Coin: {x.Quote} \\ Market cap: {x.MarketCap} \\ Risk: {x.Risk} \\ AltRank: {x.AltRank}"));
 
-            return new CommandResult(CommandResultType.PORTFOLIO, new CommandResultPortfolio { Text = text });
+            return new CommandResult<CommandResultPortfolio>(CommandResultType.PORTFOLIO, new CommandResultPortfolio(text));
         }
 
         private Task<List<Pair>> GetPairs(PortfolioOptions options)

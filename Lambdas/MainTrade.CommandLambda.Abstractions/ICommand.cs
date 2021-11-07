@@ -5,6 +5,6 @@ namespace MainTrade.CommandLambda
 {
     public interface ICommand<TOptions> where TOptions : IOptions
     {
-        public Task<CommandResult> ProcessAsync(TOptions options);
+        public Task<ICommandResult> ProcessAsync(TOptions options);
     }
 }
