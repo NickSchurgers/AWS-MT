@@ -6,6 +6,8 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using MainTrade.Lib.Extensions;
+using System.Linq;
 
 namespace MainTrade.TelegramBotLambda
 {
@@ -30,8 +32,12 @@ namespace MainTrade.TelegramBotLambda
 
         private static string ParseMetrics(string data)
         {
+            var entry = JsonSerializer.Deserialize<CommandResultMetrics>(data).Entry;
             var sb = new StringBuilder();
-            FormatMetrics(JsonSerializer.Deserialize<CommandResultMetrics>(data).Entry, ref sb);
+
+            FormatMetrics(entry, ref sb);
+
+            sb.AppendLine($"<i>Listed on: {string.Join(",", entry.Exchanges.Select(x => x.FirstCharToUpper()))}</i>");
 
             return sb.ToString();
         }
@@ -89,7 +95,7 @@ namespace MainTrade.TelegramBotLambda
             return sb.ToString();
         }
 
-        private static void FormatMetrics(CommandResultMetricsEntry entry, ref StringBuilder sb)
+        private static void FormatMetrics(CommandResultMetricsEntryBase entry, ref StringBuilder sb)
         {
             sb.AppendLine();
 
