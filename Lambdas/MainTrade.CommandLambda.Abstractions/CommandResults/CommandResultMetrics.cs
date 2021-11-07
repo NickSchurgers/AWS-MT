@@ -1,4 +1,4 @@
 ﻿namespace CommandLambda.CommandResults
 {
-    public record CommandResultMetrics(string Text);
+    public record CommandResultMetrics(CommandResultMetricsEntry Entry);
 }

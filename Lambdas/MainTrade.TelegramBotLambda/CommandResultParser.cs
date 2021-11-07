@@ -1,4 +1,5 @@
-﻿using CommandLambda.CommandResults;
+﻿using Amazon.Lambda.Core;
+using CommandLambda.CommandResults;
 using MainTrade.CommandLambda;
 using System;
 using System.IO;
@@ -29,8 +30,10 @@ namespace MainTrade.TelegramBotLambda
 
         private static string ParseMetrics(string data)
         {
-            var metrics = JsonSerializer.Deserialize<CommandResultMetrics>(data);
-            return metrics.Text;
+            var sb = new StringBuilder();
+            FormatMetrics(JsonSerializer.Deserialize<CommandResultMetrics>(data).Entry, ref sb);
+
+            return sb.ToString();
         }
 
         private static string ParsePortfolio(string data)
@@ -42,10 +45,7 @@ namespace MainTrade.TelegramBotLambda
 
             foreach (var entry in pf.Entries)
             {
-                sb.AppendLine()
-                    .AppendLine($"<u>{entry.Quote} - {entry.Allocation}%</u>")
-                    .AppendLine($"<i>Risk: {entry.Risk} | Momentum: {entry.Momentum}</i>")
-                    .AppendLine($"<i>Market cap: {entry.MarketCap} | Market cap rank: {entry.MarketCapRank} | Alt rank: {entry.AltRank}</i>");
+                FormatMetrics(entry, ref sb);
             }
 
             return sb.ToString();
@@ -56,7 +56,8 @@ namespace MainTrade.TelegramBotLambda
             var list = JsonSerializer.Deserialize<CommandResultList>(data).List;
             var sb = new StringBuilder();
 
-            sb.AppendLine("<b>Supported exchanges:</b>");
+            sb.AppendLine("<b>Supported exchanges:</b>")
+                .AppendLine();
 
             foreach (var entry in list)
             {
@@ -74,8 +75,35 @@ namespace MainTrade.TelegramBotLambda
 
         private static string ParseError(string data)
         {
-            var error = JsonSerializer.Deserialize<CommandResultError>(data);
-            return error.Exception.Message;
+            var errors = JsonSerializer.Deserialize<CommandResultError>(data).Entries;
+            var sb = new StringBuilder();
+
+            sb.AppendLine("<b>One or multiple errors occured:</b>")
+                .AppendLine();
+
+            foreach (var entry in errors)
+            {
+                sb.AppendLine($"- {entry.Message}");
+            }
+
+            return sb.ToString();
+        }
+
+        private static void FormatMetrics(CommandResultMetricsEntry entry, ref StringBuilder sb)
+        {
+            sb.AppendLine();
+
+            if (entry is CommandResultPortfolioEntry pf)
+            {
+                sb.AppendLine($"<u>{entry.Quote} - {pf.Allocation}%</u>");
+            }
+            else
+            {
+                sb.AppendLine($"<u>{entry.Quote}</u>");
+            }
+
+            sb.AppendLine($"<i>Risk: {entry.Risk} | Momentum: {entry.Momentum}</i>")
+            .AppendLine($"<i>Market cap: {entry.MarketCap} | Market cap rank: {entry.MarketCapRank} | Alt rank: {entry.AltRank}</i>");
         }
     }
 }

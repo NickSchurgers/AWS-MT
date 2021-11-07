@@ -61,7 +61,9 @@ namespace MainTrade.CommandLambda
             }
             catch (Exception ex)
             {
-                return new CommandResult<CommandResultError>(CommandResultType.ERROR, new CommandResultError(ex));
+                return new CommandResult<CommandResultError>(
+                    CommandResultType.ERROR,
+                    new CommandResultError(new List<CommandResultErrorEntry> { new CommandResultErrorEntry(ex.Message, ex.StackTrace) }));
             }
         }
 
@@ -99,14 +101,16 @@ namespace MainTrade.CommandLambda
 
             var builder = SentenceBuilder.Create();
             var errorMessages = HelpText.RenderParsingErrorsTextAsLines(result, builder.FormatError, builder.FormatMutuallyExclusiveSetErrors, 1);
-            var excList = errorMessages.Select(msg => new ArgumentException(msg)).ToList();
+            var excList = errorMessages.Select(msg => new CommandResultErrorEntry(msg, string.Empty)).ToList();
 
             if (excList.Any())
             {
-                return new CommandResult<CommandResultError>(CommandResultType.ERROR, new CommandResultError(new AggregateException(excList)));
+                return new CommandResult<CommandResultError>(CommandResultType.ERROR, new CommandResultError(excList));
             }
 
-            return new CommandResult<CommandResultError>(CommandResultType.ERROR, new CommandResultError(new ArgumentException("Error processing command.")));
+            return new CommandResult<CommandResultError>(
+                CommandResultType.ERROR,
+                new CommandResultError(new List<CommandResultErrorEntry> { new CommandResultErrorEntry("Error processing command.", string.Empty) }));
         }
     }
 }
