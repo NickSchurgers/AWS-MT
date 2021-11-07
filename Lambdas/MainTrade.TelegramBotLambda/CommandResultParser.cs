@@ -43,7 +43,7 @@ namespace MainTrade.TelegramBotLambda
             foreach (var entry in pf.Entries)
             {
                 sb.AppendLine()
-                    .AppendLine($"<u>{entry.Quote} - ${entry.Allocation}%</u>")
+                    .AppendLine($"<u>{entry.Quote} - {entry.Allocation}%</u>")
                     .AppendLine($"<i>Risk: {entry.Risk} | Momentum: {entry.Momentum}</i>")
                     .AppendLine($"<i>Market cap: {entry.MarketCap} | Market cap rank: {entry.MarketCapRank} | Alt rank: {entry.AltRank}</i>");
             }
