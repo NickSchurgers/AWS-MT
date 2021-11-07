@@ -74,7 +74,7 @@ namespace MainTrade.CommandLambda
 
                     case ErrorType.HelpRequestedError:
                     case ErrorType.HelpVerbRequestedError:
-                        return new CommandResult<CommandResultText>(CommandResultType.TEXT, new CommandResultText(HelpText.AutoBuild(result).ToString()));
+                        return new CommandResult<CommandResultText>(CommandResultType.TEXT, new CommandResultText(new CommandResultTextEntry(HelpText.AutoBuild(result).ToString())));
 
                     case ErrorType.BadFormatTokenError:
                     case ErrorType.MissingValueOptionError:

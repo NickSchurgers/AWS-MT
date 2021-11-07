@@ -12,7 +12,9 @@ using MainTrade.CommandLambda;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
@@ -73,7 +75,7 @@ namespace MainTrade.TelegramBotLambda
                 var snsRequest = new PublishRequest
                 {
                     TopicArn = "arn:aws:sns:us-east-1:890196580586:telegram",
-                    Message = await ParseResult(response.Payload),
+                    Message = await CommandResultParser.ParseResult(response.Payload),
                     MessageAttributes = new Dictionary<string, MessageAttributeValue> {
                         { "chat_id",
                             new MessageAttributeValue { DataType = "String", StringValue = updateEvent.Message.Chat.Id.ToString() }
@@ -91,53 +93,6 @@ namespace MainTrade.TelegramBotLambda
 
                 return new APIGatewayHttpApiV2ProxyResponse { StatusCode = (int)HttpStatusCode.InternalServerError };
             }
-        }
-
-        private static async Task<string> ParseResult(MemoryStream json)
-        {
-            var jsonRoot = (await JsonDocument.ParseAsync(json)).RootElement;
-            var type = (CommandResultType)jsonRoot.GetProperty("Type").GetInt32();
-            var data = jsonRoot.GetProperty("Data").GetRawText();
-
-            return type switch
-            {
-                CommandResultType.METRICS => ParseMetrics(data),
-                CommandResultType.PORTFOLIO => ParsePortfolio(data),
-                CommandResultType.LIST => ParseList(data),
-                CommandResultType.TEXT => ParseText(data),
-                CommandResultType.ERROR => ParseError(data),
-                _ => throw new ArgumentOutOfRangeException($"Invalid command result type: {type}"),
-            };
-        }
-
-        private static string ParseMetrics(string data)
-        {
-            var metrics = JsonSerializer.Deserialize<CommandResultMetrics>(data);
-            return metrics.Text;
-        }
-
-        private static string ParsePortfolio(string data)
-        {
-            var pf = JsonSerializer.Deserialize<CommandResultPortfolio>(data);
-            return pf.Text;
-        }
-
-        private static string ParseList(string data)
-        {
-            var list = JsonSerializer.Deserialize<CommandResultList>(data);
-            return "";
-        }
-
-        private static string ParseText(string data)
-        {
-            var text = JsonSerializer.Deserialize<CommandResultText>(data);
-            return text.Text;
-        }
-
-        private static string ParseError(string data)
-        {
-            var error = JsonSerializer.Deserialize<CommandResultError>(data);
-            return error.Exception.Message;
         }
     }
 }

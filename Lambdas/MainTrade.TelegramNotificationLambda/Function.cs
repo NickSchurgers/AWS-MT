@@ -55,7 +55,7 @@ namespace MainTrade.TelegramNotificationLambda
                 {
                     record.MessageAttributes.TryGetValue("chat_id", out SNSEvent.MessageAttribute chatIdAttribute);
                     _ = long.TryParse(chatIdAttribute.Value, out long chatId);
-                    await _botClient.SendTextMessageAsync(new ChatId(chatId), record.Message);
+                    await _botClient.SendTextMessageAsync(new ChatId(chatId), record.Message, Telegram.Bot.Types.Enums.ParseMode.Html);
                 }
             }
             catch (Exception ex)

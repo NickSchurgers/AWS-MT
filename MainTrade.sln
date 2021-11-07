@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lambdas", "Lambdas", "{92932C3B-7F38-4BFB-A0DB-7A3972BF7693}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainTrade.Data.Abstractions", "MainTrade.Data.Abstractions\MainTrade.Data.Abstractions.csproj", "{2B141E64-D04D-4A34-BF7D-26E8E13D9B85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainTrade.Data.Abstractions", "MainTrade.Data.Abstractions\MainTrade.Data.Abstractions.csproj", "{2B141E64-D04D-4A34-BF7D-26E8E13D9B85}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainTrade.CommandLambda.Abstractions", "Lambdas\MainTrade.CommandLambda.Abstractions\MainTrade.CommandLambda.Abstractions.csproj", "{F89E3BA7-B2D2-40C7-902E-3F12E85D6C6E}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainTrade.TelegramBotLambda", "Lambdas\MainTrade.TelegramBotLambda\MainTrade.TelegramBotLambda.csproj", "{F80F8195-41E7-492A-B5D5-A8AB3806011A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainTrade.TelegramNotificationLambda", "Lambdas\MainTrade.TelegramNotificationLambda\MainTrade.TelegramNotificationLambda.csproj", "{6FBC4A39-157F-4227-B187-114C80C866F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainTrade.Lib", "MainTrade.Lib\MainTrade.Lib.csproj", "{ECAD60D2-0CE5-45FC-B52B-DE68912F815E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{6FBC4A39-157F-4227-B187-114C80C866F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FBC4A39-157F-4227-B187-114C80C866F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FBC4A39-157F-4227-B187-114C80C866F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECAD60D2-0CE5-45FC-B52B-DE68912F815E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECAD60D2-0CE5-45FC-B52B-DE68912F815E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECAD60D2-0CE5-45FC-B52B-DE68912F815E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECAD60D2-0CE5-45FC-B52B-DE68912F815E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,6 +4,7 @@ using CommandLambda;
 using CommandLambda.CommandResults;
 using MainTrade.CommandLambda.Options;
 using MainTrade.Data;
+using MainTrade.Lib.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +21,16 @@ namespace MainTrade.CommandLambda.Commands
             pairs = Sort(options, pairs)
                 .Take(options.Amount);
 
-            var text = string.Join(Environment.NewLine, pairs.Select(x => $"Coin: {x.Quote} \\ Market cap: {x.MarketCap} \\ Risk: {x.Risk} \\ AltRank: {x.AltRank}"));
-
-            return new CommandResult<CommandResultPortfolio>(CommandResultType.PORTFOLIO, new CommandResultPortfolio(text));
+            return new CommandResult<CommandResultPortfolio>(
+                CommandResultType.PORTFOLIO,
+                new CommandResultPortfolio(pairs.Select(x => new CommandResultPortfolioEntry(
+                    50,
+                    x.Quote, 
+                    x.MarketCap.GetValueOrDefault(), 
+                    x.Risk.GetValueOrDefault(), 
+                    x.Momentum.GetValueOrDefault(), 
+                    x.AltRank.GetValueOrDefault(), 
+                    x.MarketCapRank.GetValueOrDefault())), options.Exchange.Trim().FirstCharToUpper()));
         }
 
         private Task<List<Pair>> GetPairs(PortfolioOptions options)

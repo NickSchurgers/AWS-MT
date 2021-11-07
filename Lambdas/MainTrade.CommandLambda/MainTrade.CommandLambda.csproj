@@ -17,6 +17,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MainTrade.Data.Abstractions\MainTrade.Data.Abstractions.csproj" />
+    <ProjectReference Include="..\..\MainTrade.Lib\MainTrade.Lib.csproj" />
     <ProjectReference Include="..\MainTrade.CommandLambda.Abstractions\MainTrade.CommandLambda.Abstractions.csproj" />
   </ItemGroup>
 </Project>

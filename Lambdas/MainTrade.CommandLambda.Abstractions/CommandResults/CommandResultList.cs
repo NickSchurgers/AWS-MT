@@ -1,6 +1,6 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 
 namespace CommandLambda.CommandResults
 {
-    public record CommandResultList(IEnumerable List);
+    public record CommandResultList(IEnumerable<CommandResultTextEntry> List);
 }
