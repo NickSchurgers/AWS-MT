@@ -35,6 +35,8 @@ namespace MainTrade.TelegramBotLambda
             var entry = JsonSerializer.Deserialize<CommandResultMetrics>(data).Entry;
             var sb = new StringBuilder();
 
+            sb.AppendLine($"<b>Metrics for \"{entry.Quote}\"</b>:");
+
             FormatMetrics(entry, ref sb);
 
             sb.AppendLine($"<i>Listed on: {string.Join(",", entry.Exchanges.Select(x => x.FirstCharToUpper()))}</i>");
@@ -102,10 +104,6 @@ namespace MainTrade.TelegramBotLambda
             if (entry is CommandResultPortfolioEntry pf)
             {
                 sb.AppendLine($"<u>{entry.Quote} - {pf.Allocation}%</u>");
-            }
-            else
-            {
-                sb.AppendLine($"<u>{entry.Quote}</u>");
             }
 
             sb.AppendLine($"<i>Risk: {entry.Risk} | Momentum: {entry.Momentum}</i>")
