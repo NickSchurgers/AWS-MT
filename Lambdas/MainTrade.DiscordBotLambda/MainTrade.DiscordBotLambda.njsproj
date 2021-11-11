@@ -34,8 +34,15 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="commandResultParser.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="commandSync.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="commands\exchangeCommand.js" />
     <Content Include="commands\metricsCommand.js" />
-    <Content Include="index.js" />
+    <Content Include="server.js" />
     <Content Include="package-lock.json" />
     <Content Include="package.json" />
   </ItemGroup>
