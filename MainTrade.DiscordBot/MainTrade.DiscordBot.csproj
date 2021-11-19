@@ -6,7 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.Lambda" Version="3.7.4.16" />
     <PackageReference Include="DSharpPlus.SlashCommands" Version="4.2.0-nightly-01044" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lambdas\MainTrade.CommandLambda.Abstractions\MainTrade.CommandLambda.Abstractions.csproj" />
+    <ProjectReference Include="..\MainTrade.Lib\MainTrade.Lib.csproj" />
   </ItemGroup>
 
 </Project>

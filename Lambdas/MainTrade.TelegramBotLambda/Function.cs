@@ -68,7 +68,7 @@ namespace MainTrade.TelegramBotLambda
                 var command = updateEvent.Message.Text.TrimStart('/').Split();
 
                 var client = new AmazonLambdaClient();
-                var request = new InvokeRequest { FunctionName = "CommandProcessor", Payload = System.Text.Json.JsonSerializer.Serialize(command) };
+                var request = new InvokeRequest { FunctionName = "CommandProcessor", Payload = JsonSerializer.Serialize(command) };
                 var response = await client.InvokeAsync(request);
 
                 var snsClient = new AmazonSimpleNotificationServiceClient();

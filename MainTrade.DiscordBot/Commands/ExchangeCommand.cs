@@ -1,18 +1,16 @@
-﻿using DSharpPlus;
-using DSharpPlus.SlashCommands;
+﻿using DSharpPlus.SlashCommands;
 using System;
 using System.Threading.Tasks;
 
-namespace Maintrade.DiscordBot.Commands
+namespace MainTrade.DiscordBot.Commands
 {
-    public class ExchangeCommand : ApplicationCommandModule
+    internal class ExchangeCommand : BaseCommand
     {
-        [SlashCommand("exchange", "Retrieve a list of supported exchanges")]
-        public async Task Command(InteractionContext ctx)
-        {
-            await ctx.CreateResponseAsync(InteractionResponseType.DeferredChannelMessageWithSource);
 
-            await ctx.EditResponseAsync(new DSharpPlus.Entities.DiscordWebhookBuilder().WithContent($"I deferred this message, bro!{Environment.NewLine}This C# lib seems to be working without bs. Just need the redo the ec2 lol."));
+        [SlashCommand("exchange", "Retrieve a list of supported exchanges")]
+        public Task Command(InteractionContext ctx)
+        {
+            return InvokeCommand(ctx, new[] { "exchange" });
         }
     }
 }
