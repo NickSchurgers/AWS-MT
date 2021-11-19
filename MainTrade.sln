@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainTrade.Lib", "MainTrade.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainTrade.DiscordNotificationLambda", "Lambdas\MainTrade.DiscordNotificationLambda\MainTrade.DiscordNotificationLambda.csproj", "{03FA3CB3-A45D-4ECB-B506-80B440736C55}"
 EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "MainTrade.DiscordBotLambda", "Lambdas\MainTrade.DiscordBotLambda\MainTrade.DiscordBotLambda.njsproj", "{93A99353-34B5-47FA-87C9-63D274E18909}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainTrade.DiscordBot", "MainTrade.DiscordBot\MainTrade.DiscordBot.csproj", "{7031374B-0222-473E-86EB-ED6678EFD5F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,10 +55,10 @@ Global
 		{03FA3CB3-A45D-4ECB-B506-80B440736C55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03FA3CB3-A45D-4ECB-B506-80B440736C55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03FA3CB3-A45D-4ECB-B506-80B440736C55}.Release|Any CPU.Build.0 = Release|Any CPU
-		{93A99353-34B5-47FA-87C9-63D274E18909}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{93A99353-34B5-47FA-87C9-63D274E18909}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{93A99353-34B5-47FA-87C9-63D274E18909}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{93A99353-34B5-47FA-87C9-63D274E18909}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7031374B-0222-473E-86EB-ED6678EFD5F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7031374B-0222-473E-86EB-ED6678EFD5F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7031374B-0222-473E-86EB-ED6678EFD5F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7031374B-0222-473E-86EB-ED6678EFD5F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,7 +69,6 @@ Global
 		{F80F8195-41E7-492A-B5D5-A8AB3806011A} = {92932C3B-7F38-4BFB-A0DB-7A3972BF7693}
 		{6FBC4A39-157F-4227-B187-114C80C866F8} = {92932C3B-7F38-4BFB-A0DB-7A3972BF7693}
 		{03FA3CB3-A45D-4ECB-B506-80B440736C55} = {92932C3B-7F38-4BFB-A0DB-7A3972BF7693}
-		{93A99353-34B5-47FA-87C9-63D274E18909} = {92932C3B-7F38-4BFB-A0DB-7A3972BF7693}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ED7CB654-227E-4CB2-B25F-EB8A7D843B4A}
