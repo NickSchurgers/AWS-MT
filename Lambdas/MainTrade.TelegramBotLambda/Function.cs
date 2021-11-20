@@ -75,7 +75,7 @@ namespace MainTrade.TelegramBotLambda
                 var snsRequest = new PublishRequest
                 {
                     TopicArn = "arn:aws:sns:us-east-1:890196580586:telegram",
-                    Message = await CommandResultParser.ParseResult(response.Payload),
+                    Message = await new CommandResultParser().ParseAsync(response),
                     MessageAttributes = new Dictionary<string, MessageAttributeValue> {
                         { "chat_id",
                             new MessageAttributeValue { DataType = "String", StringValue = updateEvent.Message.Chat.Id.ToString() }

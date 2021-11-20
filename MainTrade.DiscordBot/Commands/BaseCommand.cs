@@ -1,6 +1,8 @@
 ﻿using Amazon.Lambda;
 using Amazon.Lambda.Model;
+using CommandLambda;
 using DSharpPlus;
+using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -11,7 +13,7 @@ namespace MainTrade.DiscordBot.Commands
     {
         public AmazonLambdaClient Client { protected get; set; }
 
-        public CommandResultParser Parser { protected get; set; }
+        public ICommandResultParser<DiscordWebhookBuilder> Parser { protected get; set; }
 
         protected async Task InvokeCommand(InteractionContext ctx, string[] command)
         {
@@ -19,7 +21,7 @@ namespace MainTrade.DiscordBot.Commands
 
             var request = new InvokeRequest { FunctionName = "CommandProcessor", Payload = JsonSerializer.Serialize(command) };
             var response = await Client.InvokeAsync(request);
-            var parsedResult = await Parser.ParseResult(response.Payload);
+            var parsedResult = await Parser.ParseAsync(response);
 
             await ctx.EditResponseAsync(parsedResult);
         }

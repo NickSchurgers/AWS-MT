@@ -12,7 +12,7 @@ namespace MainTrade.CommandLambda.Commands
         public override async Task<ICommandResult> ProcessAsync(ExchangeOptions options)
         {
             var exchanges = await Context.QueryAsync<Exchange>(PartitionKeys.EXCHANGE).GetRemainingAsync();
-            return new CommandResult<CommandResultList>(CommandResultType.LIST, new CommandResultList(exchanges.Select(x => new CommandResultTextEntry(x.Sk))));
+            return new CommandResult<CommandResultList>(CommandResultType.LIST, new CommandResultList(exchanges.Select(x => new CommandResultTextEntry(x.Sk)), "Available exchanges"));
         }
     }
 }

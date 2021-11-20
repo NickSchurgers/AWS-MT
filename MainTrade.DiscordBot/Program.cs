@@ -1,5 +1,7 @@
 ﻿using Amazon.Lambda;
+using CommandLambda;
 using DSharpPlus;
+using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using MainTrade.DiscordBot.Commands;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,7 +36,7 @@ namespace MainTrade.DiscordBot
         {
             var services = new ServiceCollection()
                 .AddSingleton<AmazonLambdaClient>()
-                .AddSingleton<CommandResultParser>();
+                .AddSingleton<ICommandResultParser<DiscordWebhookBuilder>, CommandResultParser>();
 
             return services.BuildServiceProvider();
         }
